@@ -1,0 +1,58 @@
+draw.Box(0,6,15,10,#888,3)
+>`3,6,#bbb,Abilities
+>`1,6,#888,╡ ######### ╞
+
+>`2,7,#8f8,(:): @cooldowns［0］@
+>`2,8,#8f8,(>>: @cooldowns［1］@
+>`2,9,#8f8,«ʘ«: @cooldowns［6］@
+>`2,10,#8f8,---: @cooldowns［7］@
+>`2,11,#f88,/¯7: @cooldowns［2］@
+>`2,12,#f88,--█: @cooldowns［3］@
+>`2,13,#88f,==/: @cooldowns［4］@
+>`2,14,#88f,((｝: @cooldowns［5］@
+
+
+draw.Box(31,1,49,5,#888,3)
+>`63,1,#bbb,Rune Abilities
+>`61,1,#888,╡ ############## ╞
+
+>`32,2,#fff,/☺: @runeCooldowns［10］@
+>`40,2,#0b0,/∞: @runeCooldowns［0］@
+>`48,2,#red,/❤: @runeCooldowns［1］@
+>`56,2,#df4,/*: @runeCooldowns［2］@
+>`64,2,#f84,/φ: @runeCooldowns［3］@
+>`72,2,#cyan,/❄: @runeCooldowns［4］@
+
+>`32,4,#fff,-☺: @runeCooldowns［11］@
+>`40,4,#0b0,-∞: @runeCooldowns［5］@
+>`48,4,#red,-❤: @runeCooldowns［6］@
+>`56,4,#df4,-*: @runeCooldowns［7］@
+>`64,4,#f84,-φ: @runeCooldowns［8］@
+>`72,4,#cyan,-❄: @runeCooldowns［9］@
+
+
+draw.Box(0,16,15,4,#888,3)
+>`6,16,#bbb,Foe
+>`4,16,#888,╡ ### ╞
+
+>`2,17,#4f4,D:@foe.distance@
+>`9,17,#f44,A:@foe.damage@
+>`2,18,#5ef,S:@foe.state@
+>`9,18,#5ef,T:@foe.time@
+
+
+draw.Box(0,20,15,5,#888,3)
+>`4,20,#bbb,RunTime
+>`2,20,#888,╡ ####### ╞
+
+>`2,21,#f88,A: @loc.averageTime@
+>`2,22,#8f8,B: @loc.bestTime@
+>`2,23,#88f,C: @totalTime@
+
+
+>`16,20,#blue,▲:@buffs.string@
+>`16,21,#f88,▼:@debuffs.string@
+
+>`16,23,#blue,▲:@foe.buffs.string@
+>`16,24,#f88,▼:@foe.debuffs.string@
+
