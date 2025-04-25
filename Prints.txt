@@ -1,12 +1,12 @@
 var cooldowns = ［
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0
+  0, // [0] dash
+  0, // [1] bash
+  0, // [2] bard
+  0, // [3] heavy
+  0, // [4] BFG
+  0, // [5] mask
+  0, // [6] mind
+  0  // [7] qs
 ］
 
 cooldowns.Emplace(0,item.GetCooldown(＂dash＂))
@@ -22,19 +22,19 @@ cooldowns.Emplace(7,item.GetCooldown
 ^(＂quarterstaff＂))
 
 var runeCooldowns = ［
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0
-］
+  0, // [0]  wand  poison
+  0, // [1]  wand  vigor
+  0, // [2]  wand  aether
+  0, // [3]  wand  fire
+  0, // [4]  wand  ice
+  0, // [5]  staff poison
+  0, // [6]  staff vigor
+  0, // [7]  staff aether
+  0, // [8]  staff fire
+  0, // [9]  staff ice
+  0, // [10] wand  stone
+  0  // [11] staff stone
+］ 
 
 runeCooldowns.Emplace(0,item.GetCooldown
 ^(＂wand_poison＂))
