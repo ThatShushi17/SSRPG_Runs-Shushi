@@ -1,3 +1,67 @@
+var cooldowns = ［
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+］
+
+cooldowns.Emplace(0,item.GetCooldown(＂dash＂))
+cooldowns.Emplace(1,item.GetCooldown(＂bash＂))
+cooldowns.Emplace(2,item.GetCooldown
+^(＂bardiche＂))
+cooldowns.Emplace(3,item.GetCooldown
+^(＂heavy_hammer＂))
+cooldowns.Emplace(4,item.GetCooldown(＂blade＂))
+cooldowns.Emplace(5,item.GetCooldown(＂mask＂))
+cooldowns.Emplace(6,item.GetCooldown(＂mind＂))
+cooldowns.Emplace(7,item.GetCooldown
+^(＂quarterstaff＂))
+
+var runeCooldowns = ［
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+］
+
+runeCooldowns.Emplace(0,item.GetCooldown
+^(＂wand_poison＂))
+runeCooldowns.Emplace(1,item.GetCooldown
+^(＂wand_vigor＂))
+runeCooldowns.Emplace(2,item.GetCooldown
+^(＂wand_aether＂))
+runeCooldowns.Emplace(3,item.GetCooldown
+^(＂wand_fire＂))
+runeCooldowns.Emplace(4,item.GetCooldown
+^(＂wand_ice＂))
+runeCooldowns.Emplace(5,item.GetCooldown
+^(＂staff_poison＂))
+runeCooldowns.Emplace(6,item.GetCooldown
+^(＂staff_vigor＂))
+runeCooldowns.Emplace(7,item.GetCooldown
+^(＂staff_aether＂))
+runeCooldowns.Emplace(8,item.GetCooldown
+^(＂staff_fire＂))
+runeCooldowns.Emplace(9,item.GetCooldown
+^(＂staff_ice＂))
+
+runeCooldowns.Emplace(10,item.GetCooldown
+^(＂wand_stone＂))
+runeCooldowns.Emplace(11,item.GetCooldown
+^(＂staff_stone＂))
+
 draw.Box(0,6,15,10,#888,3)
 >`3,6,#bbb,Abilities
 >`1,6,#888,╡ ######### ╞
