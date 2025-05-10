@@ -1,0 +1,406 @@
+/*
+========================
+Pet Enoki - ThatShushi17
+========================
+*/
+
+var enokiColor = #fff
+?loc.stars <= 5
+  enokiColor = #fff
+:?loc.stars <= 10
+  enokiColor = #cyan
+:?loc.stars <= 15
+  enokiColor = #yellow
+:?loc.stars <= 20
+  enokiColor = #green
+
+var latestFoe = ＂＂
+
+var sporeX
+var sporeY
+var sporeDrawX
+var sporeDrawY
+var sporeToken
+var sporeGlyph
+var sporeTime
+
+var enokiX
+var enokiY
+var enokiSpriteY
+var enokiDrawX
+var enokiDrawY
+var enokiThreshold = 10
+var enokiToken
+var enokiIdle
+var enokiTunnel
+
+var legToken
+var legTime
+
+var enokiASCII
+
+?loc.begin | loc.loop
+  latestFoe = ＂＂
+
+  sporeX = pos.x
+  sporeY = pos.z
+  sporeToken = false
+  sporeTime = 0
+
+  enokiX = pos.x
+  enokiY = pos.z
+  enokiSpriteY = 0
+  enokiToken = false
+  enokiIdle = 0
+  enokiTunnel = 0
+
+  legToken = false
+  legTime = 0
+
+  enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+?latestFoe = ＂boss＂ & foe.count = 0 & foe.hp < 0
+  legToken = true
+  legTime = 0
+
+?foe = phase1 | foe = phase2 | foe = phase3
+  latestFoe = ＂boss＂
+:
+  latestFoe = ＂common＂
+
+?pos.x - enokiX >= enokiThreshold |
+^pos.x - enokiX <= -7
+  ?!enokiToken &!legToken
+    enokiToken = true
+    enokiIdle = 0
+    enokiTunnel = 0
+
+?!enokiToken & sporeTime > 60 & enokiIdle > 10 &
+^!legToken
+  sporeX = enokiX -1 +1
+  sporeY = enokiY -1 +1
+  sporeToken = true
+  sporeTime = 0
+
+?enokiToken & !legToken
+  enokiIdle = 0
+
+  ?enokiTunnel = 0
+    enokiSpriteY = 0
+    enokiASCII = ascii
+##__
+#/ °\_
+<° _☺ >
+##¯|¯
+#/¯¯¯\
+#|   |
+#| ´ `
+#|_°>°
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 2
+    enokiSpriteY = 1
+    enokiASCII = ascii
+##__
+#/ °\_
+\°#_☺#/
+##¯|¯
+#/¯¯¯\
+#|###|
+#|_´#`
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 4
+    enokiSpriteY = 3
+    enokiASCII = ascii
+##__
+#/#°\_
+\° _☺ /
+##¯|¯
+#/¯¯¯\
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 6
+    enokiSpriteY = 5
+    enokiASCII = ascii
+##__
+#/ °\_
+|°__☺_|
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 8 | enokiTunnel = 26
+    enokiSpriteY = 6
+    enokiASCII = ascii
+##__
+#/  \_
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 10 | enokiTunnel = 24
+    enokiSpriteY = 8
+    enokiASCII = ascii
+#¯¯¯¯¯
+asciiend
+
+
+  :?enokiTunnel = 12 | enokiTunnel = 22
+    enokiSpriteY = 8
+    enokiASCII = ascii
+##¯¯¯
+asciiend
+
+  :?enokiTunnel = 14 | enokiTunnel = 20
+    enokiSpriteY = 8
+    enokiASCII = ascii
+###¯
+asciiend
+
+  :?enokiTunnel = 16
+    enokiX = pos.x
+    enokiY = pos.z
+
+    enokiASCII = ＂＂
+
+  :?enokiTunnel = 28
+    enokiSpriteY = 5
+    enokiASCII = ascii
+##__
+#/ °\_
+|°__☺_|
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 30
+    enokiSpriteY = 3
+    enokiASCII = ascii
+##__
+#/ °\_
+/° _☺ \
+#|¯´¯`
+#|_°>°
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 32
+    enokiSpriteY = 2
+    enokiASCII = ascii
+##__
+#/ °\_
+/° _☺ \
+#|¯´¯`
+#| °>°
+#|__o|
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 34
+    enokiSpriteY = 1
+    enokiASCII = ascii
+##__
+#/ °\_
+/° _☺ \
+#|¯´¯`
+#| °>°
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+  :?enokiTunnel = 36
+    enokiSpriteY = 0
+    enokiASCII = ascii
+##__
+#/ °\_
+/°  ☺ \
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+
+  :?enokiTunnel = 38
+    enokiSpriteY = 0
+    enokiToken = false
+
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+  enokiTunnel++
+:?!legToken
+  enokiIdle++
+
+?foe ! boss & enokiIdle > 300 |
+^foe = boss & enokiIdle > 600
+  ?!legToken
+    enokiSpriteY = 0
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| ¯>¯
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+?sporeToken &!legToken
+  ?sporeTime < 15
+    sporeGlyph = ＂☺＂
+
+  :?sporeTime < 30
+    sporeGlyph = ＂•＂
+
+  :?sporeTime < 40
+    sporeGlyph = ＂·＂
+
+  ?sporeTime = 20
+    sporeX--
+
+  :?sporeTime = 30
+    sporeY--
+
+  :?sporeTime = 40
+    sporeToken = false
+    sporeGlyph = ＂＂
+
+sporeTime++
+
+?legToken
+  ?legTime = 0
+    enokiSpriteY = 0
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|___|
+#¯¯¯¯¯
+asciiend
+
+  :?legTime = 4
+    enokiSpriteY = -1
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|   |
+#/___\
+#¯¯¯¯¯
+asciiend
+
+  :?legTime = 8
+    enokiSpriteY = -2
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|   |
+#/   \
+#|_)__)
+#¯¯¯¯¯¯
+asciiend
+
+  :?legTime = 12
+    enokiSpriteY = -3
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|   |
+#/   \
+#| )  )
+#\_/_/
+#¯¯¯¯¯
+asciiend
+
+  :?legTime >= 16
+    enokiSpriteY = -3
+    enokiASCII = ascii
+##__
+#/ °\_
+<°  ☺ >
+#|¯¯¯|
+#| ´ `
+#| °>°
+#|  o|
+#|   |
+#/   \
+#( )  )
+#\ / /
+#(_\_\
+asciiend
+/*
+  :?legTime >= 16
+    enokiSpriteY = -3
+    enokiASCII = ascii
+###__
+#_/° \
+< ☺   >
+#|¯¯¯|
+#´ ` |
+#°<° |
+#|o  |
+#|   |
+#/   \
+(  ( )
+#\ \ /
+#/_/_\
+asciiend*/
+
+legTime++
+
+sporeDrawX = sporeX - pos.x - 8
+sporeDrawY = sporeY - pos.z - 5
+
+?sporeToken
+  >o@sporeDrawX@,@sporeDrawY@,#bbb,@sporeGlyph@
+
+enokiDrawX = enokiX - pos.x - 10
+enokiDrawY = enokiY - pos.z
+           ^ + enokiSpriteY - 4
+
+>o@enokiDrawX@,@enokiDrawY@,@enokiColor@,
+^@enokiASCII@
