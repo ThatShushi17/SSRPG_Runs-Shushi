@@ -1,0 +1,221 @@
+/*
+========================
+PetSaiyan -ThatShushi17
+========================
+*/
+
+var isSaiyanAttack
+
+var saiyanX
+var saiyanY
+
+var saiyanTargetX
+var saiyanTargetY
+var isSaiyanTarget
+
+var saiyanSpriteX
+var saiyanSpriteY
+var hairSpriteX
+var hairSpriteY
+
+var drawSaiyanX
+var drawSaiyanY
+var drawHairX
+var drawHairY
+var drawHair
+var drawSaiyan
+
+?loc.begin | loc.loop
+  saiyanX = 0
+  saiyanY = 0
+  saiyanTargetX = saiyanX
+  saiyanTargetY = saiyanY
+
+var hair_right = ascii
+\',
+`
+asciiend
+
+var hair_left = ascii
+ι'/
+##´
+asciiend
+
+var saiyan_normal = ascii
+#o
+/||
+//
+asciiend
+
+var saiyan_fast_right = ascii
+###o
+#¯/
+¯-
+asciiend
+
+var saiyan_fast_left = ascii
+o
+\¯
+#-¯
+asciiend
+
+
+
+var saiyan_charge = ascii
+#o
+└#\┘
+##/\
+asciiend
+
+var saiyan_kick_1 = ascii
+o#_
+/\##-
+#<#¯#-
+asciiend
+
+var saiyan_kick_2 = ascii
+o#_
+/\##¯
+#<#-#¯
+asciiend
+
+var saiyan_kick_3 = ascii
+o#_
+/\#-#¯
+#<##-
+asciiend
+
+var saiyan_punch_1 = ascii
+##o##-
+#/#¯
+/>##¯
+asciiend
+
+var saiyan_punch_2 = ascii
+##o#-
+#/#_#-
+/>
+asciiend
+
+var saiyan_punch_3 = ascii
+##o##¯
+#/##-
+/>####¯
+asciiend
+
+var saiyan_kick = ［
+  saiyan_kick_1,
+  saiyan_kick_2,
+  saiyan_kick_3
+］
+
+var saiyan_punch = ［
+  saiyan_punch_1,
+  saiyan_punch_2,
+  saiyan_punch_3
+］
+
+
+?foe.distance <= 22
+  saiyanTargetX = foe.distance - 3
+
+  saiyanTargetY = foe.z - pos.z + 1
+
+  isSaiyanAttack = true
+:
+  saiyanTargetX = -5
+  saiyanTargetY = 0
+
+  isSaiyanAttack = false
+
+  
+?saiyanTargetX ! saiyanX |
+^saiyanTargetY ! saiyanY
+  ?math.abs(saiyanX - saiyanTargetX) < 2
+    saiyanX = saiyanTargetX
+
+    drawSaiyan = saiyan_normal
+
+  :?saiyanX > saiyanTargetX
+    saiyanX -= 2
+
+    drawSaiyan = saiyan_fast_left
+  :
+    saiyanX += 2
+
+    drawSaiyan = saiyan_fast_right
+
+  ?math.abs(saiyanY - saiyanTargetY) < 2
+    saiyanY = saiyanTargetY
+
+  :?saiyanY > saiyanTargetY
+    saiyanY -= 2
+
+  :
+    saiyanY += 2
+
+  drawHair = hair_right
+
+
+:?player.framesPerMove = 1 & ai.walking
+  drawHair = hair_right
+  drawSaiyan = saiyan_fast_right
+:
+  drawHair = hair_right
+  drawSaiyan = saiyan_normal
+
+
+?isSaiyanAttack
+//  ?time % 240 >= 120
+//    drawSaiyan = saiyan_kick［time/2 % 3］
+//  :
+    drawSaiyan = saiyan_punch［time/2 % 3］
+
+
+?drawSaiyan = saiyan_normal
+  saiyanSpriteX = -1
+  saiyanSpriteY = 0
+  hairSpriteX = -1
+  hairSpriteY = -1
+
+  drawHair = hair_right
+
+:?drawSaiyan = saiyan_fast_right
+  saiyanSpriteX = -3
+  saiyanSpriteY = 0
+  hairSpriteX = -1
+  hairSpriteY = -1
+
+  drawHair = hair_right
+
+:?drawSaiyan = saiyan_fast_left
+  saiyanSpriteX = 0
+  saiyanSpriteY = 0
+  hairSpriteX = -1
+  hairSpriteY = -1
+
+  drawHair = hair_right
+
+:?saiyan_punch.Contains(drawSaiyan)
+  saiyanSpriteX = -2
+  saiyanSpriteY = 0
+  hairSpriteX = -1
+  hairSpriteY = -1
+
+  drawHair = hair_right
+
+:?saiyan_kick.Contains(drawSaiyan)
+  saiyanSpriteX = 0
+  saiyanSpriteY = 0
+  hairSpriteX = -1
+  hairSpriteY = -1
+
+  drawHair = hair_right
+
+drawSaiyanX = saiyanSpriteX + saiyanX
+drawSaiyanY = saiyanSpriteY + saiyanY
+drawHairX = hairSpriteX + saiyanX
+drawHairY = hairSpriteY + saiyanY
+
+>o@drawSaiyanX@,@drawSaiyanY@,#fff,@drawSaiyan@
+>o@drawHairX@,@drawHairY@,#yellow,@drawHair@
