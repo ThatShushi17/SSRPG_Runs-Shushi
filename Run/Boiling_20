@@ -1,0 +1,296 @@
+disable banner
+disable npcDialog
+import UI/MindstoneButton
+import UI/FoeStateTracker
+
+?hp < maxhp
+  loc.Leave()
+
+?loc.begin
+  var prevX = pos.x
+  var loopCount = 0
+  
+  var fD = 999
+  var pot = ""
+  var GC = item.GetCooldown
+  var CA = item.CanActivate
+  var bGT = buffs.GetTime
+  var dbGT = debuffs.GetTime
+  var fbGT = foe.buffs.GetTime
+  var fdbGT = foe.debuffs.GetTime
+
+  var kbCb = "stone crossbow"
+  var infStaff = "infernal staff"
+  var berStaff = "berserker staff"
+  var bard = "bardiche"
+  var heavy
+
+  var cb = "aether crossbow D"
+  var wand = "aether wand D"
+  var shield = "aether shield A"
+  var sword1 = "aether sword D"
+  
+  var _talisman
+
+  var Priority
+  var Conditional
+  var Behavior
+
+  var right = comp
+  var left = trisk
+  var abilityHand = null
+  var potId
+
+  var canBash = true
+:
+  fD = foe.distance
+  pot = item.potion
+
+
+?loc.loop
+  loopCount++
+
+/* ========
+    Helper
+ ========== */
+
+func AAC()
+  ?item.left.state = 3
+    equipL hammer 1 +0
+  :?item.right.state = 3
+    ?time % 2 = 0
+      equipR wand 1 +0
+    
+      equipR shield 1 +0
+
+func EquipItemTrisk(altLeft)
+  ?pos.x - 1 = prevX & buffs.string !"inf_speed"
+    left = altLeft
+  :
+    left = trisk
+
+func Stutterstep(items)
+  ?pos.x - 1 = prevX
+    right = hatchet
+    left = trisk
+  :?items.Count() = 1
+    right = items[0]
+    left = ""
+  :
+    right = items[0]
+    left = items[1]
+
+func ActivateTalisman()
+  ?GC("talisman_" + _talisman) & summon.count=1
+    //Logic()
+    return true
+
+  ?!loopCount
+    right = mask
+    left = _talisman + " talisman"
+  :
+    right = _talisman + " talisman"
+    EquipItemTrisk(quest)
+
+  ?GC("talisman_" + _talisman) <= 0
+    ?!loopCount
+      abilityHand = "L"
+    :
+      abilityHand = "R"
+
+func DashBack()
+  ?CA() & GC("staff_stone") <= 0 & armor > 3
+    right = acro
+    left = ""
+    abilityHand = "R"
+  :
+    right = mind
+    left = trisk
+
+  return true
+
+/* ==========
+    Run Code
+ ============ */
+
+func NoFoe()
+  ?foe.distance > 16
+    EquipItemTrisk(quest)
+
+    ?pickup.distance <= 14
+      right = star
+    
+    :?GC("quarterstaff") <= 0 &
+    ^CA()
+      right = quarter
+      left = ""
+      abilityHand = "R"
+
+    :?!loopCount
+      right = mask
+    :?foe.distance > 40
+      right = comp
+    :
+      right = shield
+
+  :?foe.distance > 10
+    EquipItemTrisk(quest)
+
+    ?GC('bash') <= 0 & canBash
+      right = bash
+    :?GC('dash') <= 0
+      right = dash shiny
+    :?!loopCount
+      right = mask
+    :
+      right = shield
+
+  :?loopCount
+    Stutterstep([cb])
+
+func InitRun()
+  right = comp
+  left = trisk
+
+  brew bronze + wood
+  potId = "berserk"
+
+  _talisman = "aether"
+  Conditional = ActivateTalisman
+
+  //Conditional = Frame2
+
+  return true
+
+func Frame2()
+  right = infStaff
+  left = ""
+  abilityHand = "R"
+  
+  
+  return true
+
+func Cutscene()
+  left = quest
+  ?!loopCount | armor > 20
+    right = mask
+  :
+    right = comp
+
+func NormalMobs()
+  ?fD > 22
+    return true
+
+  ?CA() & GC("voidweaver") <= 0
+    ?fD > 6
+      Behavior = NoFoe
+      Logic()
+      return
+    :
+      activate voidweaver
+  
+  Stutterstep([cb])
+
+func NormalMiniboss()
+  Behavior = NoFoe
+  canBash = false
+
+  ?foe.distance <= 4
+    Priority = DashBack
+    canBash = true
+
+  Logic()
+  
+func Boss()
+  ?bGT("berserk") > 10
+    right = cb
+    left = ""
+    return
+
+  right = mask
+
+  ?foe.state = 32 & foe.time = 30
+    left = mind
+    return
+
+  ?foe.state ! 33
+    left = wand
+    return
+
+  ?fD > 6
+    Behavior = NoFoe
+    Logic()
+  :
+    right = sword1
+    left = wand
+
+  left = quest
+
+
+func Main()
+  ?CA() & pot ! empty & bGT(potId) <= 50 
+    activate P
+
+  ?loc.begin | loc.loop
+    Priority = InitRun
+
+  ?!ai.enabled | ai.paused
+    Behavior = Cutscene
+
+  :?foe = phase & fD <= 20
+    Behavior = Boss
+
+  :?fD > 6 & loopCount |
+  ^fD > 22 & !loopCount
+    Behavior = NoFoe
+
+  :?encounter.isElite
+    var sybau
+  :
+    ?foe = boss
+      Behavior = NormalMiniboss
+    :
+      Behavior = NormalMobs
+
+func Logic()
+  ?Priority
+    ?Priority()
+      Priority = null
+
+  :?Conditional
+    ?Conditional()
+      Conditional = null
+
+  :
+    Behavior()
+
+Main()
+Logic()
+
+AAC()
+
+?!left
+  equip @right@
+:
+  equipR @right@
+  equipL @left@
+
+?abilityHand = "R"
+  activate R
+  abilityHand = null
+:?abilityHand = "L"
+  activate L
+  abilityHand = null
+
+
+/* boss final phase
+:?foe.state = 4
+  loc.Pause()
+
+infernal towering
+(buffs.GetTime("infernal") - 1) % 60 = 0
+*/
+
+>`19,1,#b0d,@bGT("berserk")@
+
+prevX = pos.x
